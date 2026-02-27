@@ -116,7 +116,7 @@
             border-color: #4ecdc4;
         }
         .preview-main::before {
-            content: '👁️ Click for 3D View';
+            content: '👁️ Tap for 3D View';
             position: absolute; top: 20px; right: 20px;
             background: rgba(78,205,196,0.9);
             padding: 10px 20px; border-radius: 25px;
@@ -124,11 +124,11 @@
         }
         .preview-main:hover::before { opacity: 1; }
         .preview-visual {
-            width: 100%; height: 350px;
+            width: 100%; height: 260px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4ecdc4 100%);
             border-radius: 15px; margin: 20px 0;
             display: flex; align-items: center; justify-content: center;
-            font-size: 4em; position: relative;
+            font-size: 3.5em; position: relative;
         }
         .preview-info-grid {
             display: grid;
@@ -149,15 +149,15 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-content {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            margin: 2%; padding: 40px; border-radius: 20px;
-            max-width: 1000px; width: 95%; max-height: 90vh;
+            margin: 2%; padding: 20px; border-radius: 20px;
+            max-width: 1000px; width: 96%; max-height: 90vh;
             overflow-y: auto; position: relative;
             border: 1px solid rgba(255,255,255,0.2);
         }
         .close {
-            position: absolute; right: 20px; top: 20px;
-            font-size: 35px; cursor: pointer; color: white;
-            width: 45px; height: 45px;
+            position: absolute; right: 10px; top: 10px;
+            font-size: 32px; cursor: pointer; color: white;
+            width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
             background: rgba(255,255,255,0.1); border-radius: 50%;
             transition: all 0.3s;
@@ -165,17 +165,17 @@
         .close:hover { background: #f093fb; transform: rotate(90deg); }
         .model-images {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px; margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px; margin: 20px 0;
         }
         .model-image {
-            width: 100%; height: 250px;
+            width: 100%; height: 220px;
             border-radius: 15px; object-fit: cover;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: transform 0.3s;
         }
-        .model-image:hover { transform: scale(1.05); }
-        .model-title { text-align: center; font-size: 2.2em; margin: 20px 0; color: #4ecdc4; }
+        .model-image:hover { transform: scale(1.03); }
+        .model-title { text-align: center; font-size: 1.7em; margin: 10px 0 5px; color: #4ecdc4; }
         .cost-breakdown {
             background: rgba(0,0,0,0.3);
             padding: 25px; border-radius: 15px;
@@ -210,6 +210,7 @@
             h1 { font-size: 2em; }
             .preview-info-grid { grid-template-columns: 1fr; }
             .model-images { grid-template-columns: 1fr; }
+            .preview-visual { height: 220px; font-size: 3em; }
         }
     </style>
 </head>
@@ -301,7 +302,7 @@
                 <h2>🏡 Expected House Structure Preview</h2>
                 <div class="preview-main" onclick="open3DPreview()">
                     <div class="preview-visual" id="previewVisual">
-                        🏠 <div style="font-size: 0.3em; margin-top: 10px;">Click for 3D References</div>
+                        🏠 <div style="font-size: 0.3em; margin-top: 10px;">Tap for 3D References</div>
                     </div>
                     <h3 id="previewTitle" style="color: #4ecdc4; margin: 20px 0;">House Structure Loading...</h3>
                     <div id="previewDesc" style="font-size: 1.2em; margin-bottom: 25px; color: #ddd;"></div>
@@ -349,9 +350,8 @@
                 <span class="close" onclick="close3DPreview()">&times;</span>
                 <h2 class="model-title" id="modalTitle">3D House References</h2>
                 <div class="model-images" id="modelImages"></div>
-                <div style="text-align: center; margin-top: 25px; color: #ccc; font-size: 1.1em;">
-                    <p>🔍 Real 3D models from architectural references</p>
-                    <p>📏 Matches your approximate plot size & house type</p>
+                <div style="text-align: center; margin-top: 10px; color: #ccc; font-size: 0.95em;">
+                    <p>Tap any image to open it in a new tab and zoom.</p>
                 </div>
             </div>
         </div>
@@ -476,18 +476,18 @@
 
             document.getElementById('formSection').style.display = 'none';
             document.getElementById('resultSection').classList.add('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         function open3DPreview() {
             const houseKey = currentData.houseKey;
             const images = bhkImages[houseKey] || bhkImages["2BHK"];
-            document.getElementById('modalTitle').textContent = `${currentData.houseType} - 3D References`;
             const imageGrid = document.getElementById('modelImages');
-            imageGrid.innerHTML = images.map(img => 
-                `<img src="${img}" alt="3D ${houseKey} Reference" class="model-image" 
-                      onclick="window.open(this.src, '_blank')" 
-                      style="cursor: zoom-in;">`
+            imageGrid.innerHTML = images.map(img =>
+                `<img src="${img}" alt="3D ${houseKey} Reference" class="model-image"
+                      onclick="window.open('${img}','_blank');">`
             ).join('');
+            document.getElementById('modalTitle').textContent = `${currentData.houseType} - 3D References`;
             document.getElementById('modelModal').classList.add('show');
             document.body.style.overflow = 'hidden';
         }
@@ -512,8 +512,14 @@
             if (pdfBtn) pdfBtn.remove();
             const backBtn = clone.querySelector('.back-btn');
             if (backBtn) backBtn.remove();
-            localStorage.setItem('scp_pdf_html', clone.innerHTML);
-            window.open('pdf.html', '_blank');
+            try {
+                localStorage.setItem('scp_pdf_html', clone.innerHTML);
+            } catch (e) {
+                alert('PDF preview not available (storage blocked on this browser).');
+                return;
+            }
+            // open in same tab for better mobile support
+            window.location.href = 'pdf.html';  /* window.open can be blocked on mobile [web:79][web:87] */
         }
 
         document.getElementById('backBtn').addEventListener('click', function(e) {
@@ -521,6 +527,7 @@
             document.getElementById('formSection').style.display = 'block';
             document.getElementById('resultSection').classList.remove('show');
             document.getElementById('constructionForm').reset();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 </body>
