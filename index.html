@@ -506,6 +506,7 @@
             const result = document.getElementById('resultSection');
             if (!result) { alert('Please generate a plan first.'); return; }
             const clone = result.cloneNode(true);
+            // remove preview & buttons for PDF
             const previewSection = clone.querySelector('.preview-section');
             if (previewSection) previewSection.remove();
             const pdfBtn = clone.querySelector('.pdf-btn');
@@ -513,13 +514,13 @@
             const backBtn = clone.querySelector('.back-btn');
             if (backBtn) backBtn.remove();
             try {
+                // store smaller HTML for more reliable mobile localStorage
                 localStorage.setItem('scp_pdf_html', clone.innerHTML);
             } catch (e) {
                 alert('PDF preview not available (storage blocked on this browser).');
                 return;
             }
-            // open in same tab for better mobile support
-            window.location.href = 'pdf.html';  /* window.open can be blocked on mobile [web:79][web:87] */
+            window.location.href = 'pdf.html'; // same-tab navigation is safer on mobile [web:79][web:80]
         }
 
         document.getElementById('backBtn').addEventListener('click', function(e) {
