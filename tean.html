@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Construction Planner – Team</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #667eea 0%, #0f2027 45%, #000000 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .wrap {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(0,0,0,0.55);
+            border-radius: 22px;
+            padding: 26px 26px 30px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4ecdc4, #f093fb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        h1 {
+            font-size: 1.6rem;
+        }
+        .tag {
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            font-size: 0.8rem;
+        }
+        .subtitle {
+            margin-top: 4px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .grid {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+            gap: 14px;
+        }
+        .member {
+            background: rgba(255,255,255,0.04);
+            border-radius: 14px;
+            padding: 12px 12px 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .member::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(102,126,234,0.25), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+        .member:hover::before { opacity: 1; }
+        .member h3 {
+            position: relative;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .role {
+            position: relative;
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-bottom: 6px;
+        }
+        .tagline {
+            position: relative;
+            font-size: 0.78rem;
+            opacity: 0.9;
+        }
+        .footer {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        a.back {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            font-size: 0.85rem;
+        }
+        a.back:hover {
+            background: rgba(255,255,255,0.22);
+        }
+        @media (max-width: 600px) {
+            .wrap { padding: 20px; }
+            h1 { font-size: 1.35rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <div class="logo-title">
+                    <div class="logo">🏗️</div>
+                    <div>
+                        <h1>Smart Construction Planner</h1>
+                        <div class="subtitle">People behind the planner</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tag">Plot analysis • Cost engine • Design hints</div>
+        </div>
+
+        <div class="grid">
+            <div class="member">
+                <h3>Swanand Mane</h3>
+                <div class="role">Lead Developer</div>
+                <div class="tagline">Core logic, UI and overall integration of the planner.</div>
+            </div>
+            <div class="member">
+                <h3>Neel Baheti</h3>
+                <div class="role">Data & Cost Modelling</div>
+                <div class="tagline">Helps tune realistic cost bands and rate logic.</div>
+            </div>
+            <div class="member">
+                <h3>Tanmay Chikode</h3>
+                <div class="role">UX & Flow</div>
+                <div class="tagline">Focus on simple steps and clear result screens.</div>
+            </div>
+            <div class="member">
+                <h3>Sandip Rathod</h3>
+                <div class="role">Architecture Research</div>
+                <div class="tagline">Inputs on house types, basic layout and Vastu notes.</div>
+            </div>
+            <div class="member">
+                <h3>Chandana Chavan</h3>
+                <div class="role">Content & Copy</div>
+                <div class="tagline">Writes helper hints and on‑screen explanations.</div>
+            </div>
+            <div class="member">
+                <h3>Sneha Khot</h3>
+                <div class="role">Testing</div>
+                <div class="tagline">Checks flows, values and edge‑cases for different plots.</div>
+            </div>
+            <div class="member">
+                <h3>Atharv Patil</h3>
+                <div class="role">Visual References</div>
+                <div class="tagline">Curates 3D inspiration images for each house type.</div>
+            </div>
+            <div class="member">
+                <h3>Shweta Mali</h3>
+                <div class="role">Sustainability & Smart‑Home</div>
+                <div class="tagline">Adds ideas for energy saving and smart‑home readiness.</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>Built to make plot‑planning faster and more fun.</span>
+            <a class="back" href="index.html">← Back to Planner</a>
+        </div>
+    </div>
+</body>
+</html>
