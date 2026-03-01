@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏗️ Smart Construction Planner - Final Year Project</title>
+    <title>🏗️ Smart Construction Planner</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -36,13 +36,31 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
         .input-group { margin-bottom: 25px; text-align: left; }
-        label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 1.1em; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 1.05em; }
+        .hint { font-size: 0.8em; opacity: 0.85; margin-top: 4px; }
         input, select {
             width: 100%; padding: 18px;
             border: 2px solid rgba(255,255,255,0.3);
             border-radius: 15px; font-size: 16px;
             background: rgba(255,255,255,0.1); color: white;
             backdrop-filter: blur(10px); transition: all 0.3s;
+        }
+        .inline-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        .inline-options label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+        .inline-options input[type="checkbox"],
+        .inline-options input[type="radio"] {
+            width: auto;
         }
         #direction {
             background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%) !important;
@@ -94,7 +112,7 @@
             text-align: center;
             border-left: 5px solid #667eea;
         }
-        .result-card h3 { color: #f093fb; margin-bottom: 15px; font-size: 1.3em; }
+        .result-card h3 { color: #f093fb; margin-bottom: 15px; font-size: 1.25em; }
         .preview-section { margin: 40px 0; }
         .preview-section h2 {
             text-align: center; margin-bottom: 30px;
@@ -140,6 +158,24 @@
             padding: 20px; border-radius: 12px; text-align: center;
         }
         .preview-feature h4 { color: #4ecdc4; margin-bottom: 10px; }
+        .sub-section {
+            background: rgba(0,0,0,0.35);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.92em;
+        }
+        .sub-section h3 {
+            margin-bottom: 10px;
+            color: #4ecdc4;
+        }
+        .sub-section ul {
+            margin-left: 18px;
+            line-height: 1.5;
+        }
+        .sub-section p {
+            line-height: 1.5;
+        }
         .modal {
             display: none; position: fixed; z-index: 1000;
             left: 0; top: 0; width: 100%; height: 100%;
@@ -204,6 +240,36 @@
             transition: all 0.3s; backdrop-filter: blur(10px);
         }
         .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-3px); }
+        .share-box {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.85em;
+            align-items: center;
+        }
+        .share-box button {
+            width: auto;
+            padding: 10px 18px;
+            font-size: 0.9em;
+        }
+        .share-box small {
+            opacity: 0.85;
+        }
+        .about-btn {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+        .about-btn:hover {
+            background: rgba(0,0,0,0.4);
+        }
         @media (max-width: 768px) {
             .container { padding: 20px; }
             .form-section, .result-section { padding: 25px; }
@@ -231,12 +297,21 @@
             <span style="padding:4px 10px;border-radius:12px;background:rgba(0,0,0,0.2);font-size:0.8em;">
                 🧭 Vastu‑Aware Orientation
             </span>
+            <span style="padding:4px 10px;border-radius:12px;background:rgba(0,0,0,0.2);font-size:0.8em;">
+                🌱 Sustainability & Smart‑Home Hints
+            </span>
         </div>
+       <button class="about-btn" type="button"
+        onclick="window.location.href='team.html';">
+    👥 About / Team
+</button>
+
+
     </div>
 
     <div class="container">
         <div id="formSection" class="form-section">
-            <h2>📐 Enter Plot Details</h2>
+            <h2>📐 Enter Plot & Lifestyle Details</h2>
             <form id="constructionForm">
                 <div class="input-group">
                     <label>Plot Length (ft):</label>
@@ -256,15 +331,49 @@
                         <option value="West">West (Stability)</option>
                     </select>
                 </div>
+
+                <div class="input-group">
+                    <label>📍 Region / City (for local cost):</label>
+                    <select id="region" required>
+                        <option value="">Select Region</option>
+                        <option value="Tier3">Smaller City / Tier‑3 (e.g., Kota)</option>
+                        <option value="Tier2">Tier‑2 City</option>
+                        <option value="Metro">Metro / Tier‑1</option>
+                    </select>
+                    <div class="hint">Rates per sq.ft automatically adjust based on region band.</div>
+                </div>
+
                 <div class="input-group">
                     <label>Budget (₹):</label>
                     <input type="number" id="budget" min="500000" max="50000000" placeholder="Total budget" required>
+                    <div class="hint">Planner will try to keep total (civil + interior + architecture) around this value.</div>
                 </div>
-                <button type="submit">🚀 Generate Complete Plan</button>
+
+                <div class="input-group">
+                    <label>👨‍👩‍👧 Lifestyle & Usage:</label>
+                    <div class="inline-options">
+                        <label><input type="checkbox" id="hostGuests"> I regularly host guests</label>
+                        <label><input type="checkbox" id="workFromHome"> I work from home</label>
+                        <label><input type="checkbox" id="kids"> Kids at home</label>
+                        <label><input type="checkbox" id="elderly"> Elderly parents at home</label>
+                    </div>
+                    <div class="hint">These preferences influence suggested layout, room focus and circulation.</div>
+                </div>
+
+                <div class="input-group">
+                    <label>🔮 Future Expansion Priority:</label>
+                    <div class="inline-options">
+                        <label><input type="radio" name="expansion" value="none" checked> No expansion</label>
+                        <label><input type="radio" name="expansion" value="vertical"> Plan for future extra floor</label>
+                        <label><input type="radio" name="expansion" value="horizontal"> Plan for future room extension</label>
+                    </div>
+                </div>
+
+                <button type="submit">🚀 Generate Complete Smart Plan</button>
                 <div style="margin-top:25px;display:flex;flex-wrap:wrap;gap:10px;font-size:0.85em;opacity:0.9;">
-                    <div style="flex:1 1 150px;">① Enter plot size, facing direction, and total budget.</div>
-                    <div style="flex:1 1 150px;">② Engine applies house‑type rules, Vastu hints and cost bands.</div>
-                    <div style="flex:1 1 150px;">③ Get suggested house category, layout preview and full cost estimate.</div>
+                    <div style="flex:1 1 150px;">① Enter plot size, region, facing direction, budget and lifestyle.</div>
+                    <div style="flex:1 1 150px;">② Engine applies rules for house‑type, local cost, Vastu, lifestyle and future expansion.</div>
+                    <div style="flex:1 1 150px;">③ Get suggested house category, layout preview, cost, sustainability and smart‑home hints.</div>
                 </div>
             </form>
         </div>
@@ -289,12 +398,13 @@
                 </div>
             </div>
 
-            <div style="background:rgba(0,0,0,0.35);border-radius:15px;padding:20px;margin-bottom:20px;font-size:0.9em;">
-                <h3 style="margin-bottom:10px;color:#4ecdc4;">📌 Key Highlights</h3>
-                <ul style="margin-left:18px;line-height:1.5;">
+            <div class="sub-section">
+                <h3>📌 Key Highlights</h3>
+                <ul>
                     <li>Automatically classifies house type (1BHK / 2BHK / Duplex) from available plot area.</li>
                     <li>Applies simple Vastu‑aware orientation rules based on facing direction.</li>
-                    <li>Generates construction, interior and architecture cost estimates from area and budget.</li>
+                    <li>Adjusts construction / interior rate bands using region and budget to stay closer to target cost.</li>
+                    <li>Provides lifestyle‑based layout notes, sustainability tips, smart‑home ideas and expansion advice.</li>
                 </ul>
             </div>
 
@@ -327,6 +437,26 @@
                 </div>
             </div>
 
+            <div class="sub-section" id="lifestyleSummarySection">
+                <h3>👨‍👩‍👧 Lifestyle‑Based Suggestions</h3>
+                <p id="lifestyleSummaryText"></p>
+            </div>
+
+            <div class="sub-section" id="sustainabilitySection">
+                <h3>🌱 Sustainability & Energy Efficiency</h3>
+                <ul id="sustainabilityList"></ul>
+            </div>
+
+            <div class="sub-section" id="expansionSection">
+                <h3>📈 Future Expansion Planning</h3>
+                <p id="expansionText"></p>
+            </div>
+
+            <div class="sub-section" id="smartHomeSection">
+                <h3>📡 Smart‑Home Readiness</h3>
+                <ul id="smartHomeList"></ul>
+            </div>
+
             <div class="cost-breakdown">
                 <h3>💰 Detailed Cost Estimation</h3>
                 <table>
@@ -336,6 +466,18 @@
                     <tr><td>Architecture</td><td id="archRate">₹300</td><td id="archTotal">₹0</td></tr>
                     <tr><td><strong>Total</strong></td><td></td><td id="grandTotal">₹0</td></tr>
                 </table>
+                <div id="budgetNote" style="margin-top:10px;font-size:0.85em;opacity:0.9;"></div>
+            </div>
+
+            <div class="sub-section">
+                <h3>🌐 Share With Architect / Friends</h3>
+                <div class="share-box">
+                    <button type="button" onclick="copySummary()">Copy Summary Text</button>
+                    <a id="waShare" target="_blank" style="text-decoration:none;">
+                        <button type="button">Share via WhatsApp</button>
+                    </a>
+                    <small id="copyStatus"></small>
+                </div>
             </div>
 
             <div style="text-align: center;">
@@ -343,6 +485,21 @@
             </div>
 
             <a href="#" id="backBtn" class="back-btn">← Generate New Plan</a>
+        </div>
+
+        <div id="teamSection" style="margin-top:30px;background:rgba(0,0,0,0.4);border-radius:16px;padding:18px;font-size:0.9em;line-height:1.6;">
+            <h3 style="margin-bottom:8px;color:#4ecdc4;">ℹ️ About This Project</h3>
+            <p>
+                Smart Construction Planner is a final‑year academic project that helps users quickly analyse a residential plot,
+                estimate realistic construction cost, and understand possible house types before meeting an architect.
+            </p>
+            <p>
+                The tool combines simple rule‑based logic for AI‑like suggestions with local‑style cost bands, lifestyle‑based
+                hints, sustainability ideas, and smart‑home readiness notes, so planning feels practical, not just visual.
+            </p>
+
+         
+
         </div>
 
         <div id="modelModal" class="modal">
@@ -377,29 +534,68 @@
             ]
         };
 
+        function getRegionFactor(region) {
+            if (region === "Tier3") return 0.9;
+            if (region === "Tier2") return 1.0;
+            if (region === "Metro") return 1.2;
+            return 1.0;
+        }
+
         document.getElementById('constructionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const length = parseFloat(document.getElementById('length').value);
             const width = parseFloat(document.getElementById('width').value);
             const direction = document.getElementById('direction').value;
+            const region = document.getElementById('region').value;
             const budget = parseFloat(document.getElementById('budget').value);
 
+            const hostGuests = document.getElementById('hostGuests').checked;
+            const workFromHome = document.getElementById('workFromHome').checked;
+            const kids = document.getElementById('kids').checked;
+            const elderly = document.getElementById('elderly').checked;
+            const expansion = document.querySelector('input[name="expansion"]:checked').value;
+
             const area = length * width;
-            let houseType = area < 800 ? "1BHK Compact House" : 
+
+            let houseType = area < 800 ? "1BHK Compact House" :
                            area <= 1500 ? "2BHK Family House" : "Duplex / Villa";
+
             let architecture = direction === "East" ? "Modern East-Facing (Living East)" :
                              direction === "North" ? "Vastu North-Facing Design" :
                              direction === "South" ? "Contemporary South Design" :
                              "Minimalist West-Facing";
+
             let interior = budget < 1000000 ? "Budget Minimal" :
                          budget <= 3000000 ? "Modern Modular" : "Luxury Premium";
-            let constRate = area < 800 ? 1600 : area <= 1500 ? 1800 : 2200;
-            let intRate = budget < 1000000 ? 600 : budget <= 3000000 ? 900 : 1500;
+
+            const regionFactor = getRegionFactor(region);
+
+            let baseConstRate = area < 800 ? 1600 : area <= 1500 ? 1800 : 2200;
+            let baseIntRate = budget < 1000000 ? 600 : budget <= 3000000 ? 900 : 1500;
             let archRate = 300;
 
+            let constRate = Math.round(baseConstRate * regionFactor);
+            let intRate = Math.round(baseIntRate * regionFactor);
+
+            const rawTotal = area * (constRate + intRate + archRate);
+
+            let budgetNote = "";
+            if (rawTotal > budget * 1.15) {
+                constRate = Math.round(constRate * 0.9);
+                intRate = Math.round(intRate * 0.85);
+                budgetNote = "⚠️ Plan is above budget, so engine suggested slightly lower material / interior band to move total closer to your target.";
+            } else if (rawTotal < budget * 0.8) {
+                intRate = Math.round(intRate * 1.1);
+                budgetNote = "ℹ️ Your budget allows better interior finish; suggesting a slightly higher interior band.";
+            } else {
+                budgetNote = "✅ Estimated total is roughly aligned with your entered budget band.";
+            }
+
             currentData = {
-                area, length, width, direction, budget, houseType, architecture, interior,
-                constRate, intRate, archRate, houseKey: houseType.split(' ')[0]
+                area, length, width, direction, budget, region,
+                houseType, architecture, interior,
+                constRate, intRate, archRate, houseKey: houseType.split(' ')[0],
+                hostGuests, workFromHome, kids, elderly, expansion
             };
 
             document.getElementById('areaResult').textContent = `${area.toFixed(2)} sq.ft`;
@@ -410,10 +606,16 @@
             document.getElementById('constRate').textContent = `₹${constRate}`;
             document.getElementById('intRate').textContent = `₹${intRate}`;
             document.getElementById('archRate').textContent = `₹${archRate}`;
-            document.getElementById('constTotal').textContent = `₹${(area*constRate).toLocaleString()}`;
-            document.getElementById('intTotal').textContent = `₹${(area*intRate).toLocaleString()}`;
-            document.getElementById('archTotal').textContent = `₹${(area*archRate).toLocaleString()}`;
-            document.getElementById('grandTotal').textContent = `₹${(area*(constRate+intRate+archRate)).toLocaleString()}`;
+            const constTotal = area * constRate;
+            const intTotal = area * intRate;
+            const archTotal = area * archRate;
+            const grandTotal = constTotal + intTotal + archTotal;
+
+            document.getElementById('constTotal').textContent = `₹${constTotal.toLocaleString()}`;
+            document.getElementById('intTotal').textContent = `₹${intTotal.toLocaleString()}`;
+            document.getElementById('archTotal').textContent = `₹${archTotal.toLocaleString()}`;
+            document.getElementById('grandTotal').textContent = `₹${grandTotal.toLocaleString()}`;
+            document.getElementById('budgetNote').textContent = budgetNote;
 
             const houseKey = houseType.split(' ')[0];
             let previewData;
@@ -422,7 +624,7 @@
                 if (area <= 400) {
                     previewData = {
                         title: "Ultra‑Compact 1BHK Studio",
-                        desc: "Combined bedroom + living zone (180sqft), compact kitchen (60sqft), common bath (40sqft), multipurpose space (80sqft). Best for single user or very compact usage.",
+                        desc: "Combined bedroom + living zone (~180 sq.ft), compact kitchen (~60 sq.ft), common bath (~40 sq.ft), multipurpose space (~80 sq.ft). Best for single user or very compact usage.",
                         rooms: "Studio (Bed + Living) + 1 Bath + Kitchen",
                         entrances: "1 Main Door",
                         windows: "2 Windows",
@@ -431,7 +633,7 @@
                 } else if (area <= 600) {
                     previewData = {
                         title: "Compact 1BHK Layout",
-                        desc: "Single bedroom (150sqft) + attached/common bath (40–50sqft), open kitchen (70–80sqft), living‑dining (150–180sqft), small sit‑out/balcony. Suitable for young couples / small families.",
+                        desc: "Single bedroom (~150 sq.ft) + attached/common bath, open kitchen (~70–80 sq.ft), living‑dining (~150–180 sq.ft), small sit‑out/balcony. Suitable for young couples / small families.",
                         rooms: "1 Bed + 1 Bath + Kitchen + Living",
                         entrances: "1 Main Door (can be East/North facing)",
                         windows: "3–4 Windows",
@@ -440,7 +642,7 @@
                 } else {
                     previewData = {
                         title: "Spacious 1BHK Premium Layout",
-                        desc: "Large bedroom (170–190sqft) with wardrobe space, attached bath (50sqft), L‑shaped kitchen (90sqft), separate dining + living (200sqft), balcony / utility (60–80sqft). Good for comfortable 1BHK living.",
+                        desc: "Large bedroom (~170–190 sq.ft) with wardrobe space, attached bath, L‑shaped kitchen (~90 sq.ft), separate dining + living (~200 sq.ft), balcony / utility (~60–80 sq.ft).",
                         rooms: "1 Large Bed + 1 Bath + Kitchen + Dining + Living",
                         entrances: "1 Main Door + Service/Utility Access",
                         windows: "4–5 Windows + Balcony",
@@ -450,20 +652,20 @@
             } else if (houseKey === "2BHK") {
                 previewData = {
                     title: "Spacious 2BHK Family Home",
-                    desc: "Master bedroom (200sqft) + ensuite (60sqft), guest bedroom (150sqft), pooja (30sqft), modular kitchen (100sqft), dining‑living (300sqft), 2 balconies.",
+                    desc: "Master bedroom (~200 sq.ft) + ensuite, guest bedroom (~150 sq.ft), pooja (~30 sq.ft), modular kitchen (~100 sq.ft), dining‑living (~300 sq.ft), 1–2 balconies.",
                     rooms: "2 Bed + 2 Bath + Pooja + Kitchen + Dining",
-                    entrances: "Main + Servant Entry",
-                    windows: "8 Windows + 2 Balconies",
+                    entrances: "Main + Optional Service Entry",
+                    windows: "8 Windows + 1–2 Balconies",
                     parking: "Car + 2‑Wheeler"
                 };
             } else {
                 previewData = {
                     title: "Luxury Duplex Villa",
-                    desc: "3 bedrooms (250/200/150sqft) + ensuites, living room (400sqft), family lounge (200sqft), kitchen (150sqft), terrace garden (300sqft), home theatre (100sqft).",
+                    desc: "3 bedrooms (approx. 250/200/150 sq.ft) with attached baths, living room (~400 sq.ft), family lounge (~200 sq.ft), kitchen (~150 sq.ft), terrace garden (~300 sq.ft), optional home theatre.",
                     rooms: "3 Bed + 4 Bath + Lounge + Theatre",
                     entrances: "Grand Main + Service Door",
-                    windows: "12 Large + Terrace Access",
-                    parking: "2 Cars + 4‑Wheelers"
+                    windows: "12 Large Windows + Terrace Access",
+                    parking: "2 Cars + 2‑Wheelers"
                 };
             }
 
@@ -474,10 +676,119 @@
             document.getElementById('windows').textContent = previewData.windows;
             document.getElementById('parking').textContent = previewData.parking;
 
+            buildLifestyleSummary(currentData);
+            buildSustainabilityHints(currentData);
+            buildExpansionAdvice(currentData);
+            buildSmartHomeHints(currentData);
+            buildShareLinks(currentData, grandTotal);
+
             document.getElementById('formSection').style.display = 'none';
             document.getElementById('resultSection').classList.add('show');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        function buildLifestyleSummary(data) {
+            let parts = [];
+            if (data.hostGuests) parts.push("larger living / dining space and guest‑friendly circulation");
+            if (data.workFromHome) parts.push("a quiet corner or dedicated workspace near natural light");
+            if (data.kids) parts.push("safe movement paths and a small play / study zone");
+            if (data.elderly) parts.push("ground‑floor bedroom and minimal level changes");
+
+            const el = document.getElementById('lifestyleSummaryText');
+            if (parts.length === 0) {
+                el.textContent = "Standard circulation with balanced bedroom and living sizes. You can refine requirements with your architect for more personalization.";
+            } else {
+                el.textContent = "Planner recommends giving priority to " + parts.join(", ") + ". These priorities can be reflected while finalizing the detailed floor plan.";
+            }
+        }
+
+        function buildSustainabilityHints(data) {
+            const list = document.getElementById('sustainabilityList');
+            const items = [];
+
+            if (data.direction === "East" || data.direction === "North") {
+                items.push("Orient living / work zones to the East/North side for softer daylight and reduced artificial lighting needs.");
+            } else {
+                items.push("Use shading devices and light‑coloured exterior paint on South/West walls to cut heat gain.");
+            }
+
+            items.push("Provide roof‑top solar panel provision; for a typical 2–3 kW system you can target noticeable savings in electricity bills over 7–8 years.");
+            items.push("Plan rainwater harvesting pit near setback area; harvested water can support borewell recharge and gardening.");
+            items.push("Cross‑ventilation: keep opposite‑side windows in living and bedrooms wherever plot shape allows.");
+            items.push("Use LED lighting and efficient fans/ACs to reduce running cost of the house.");
+
+            list.innerHTML = items.map(x => `<li>${x}</li>`).join("");
+        }
+
+        function buildExpansionAdvice(data) {
+            const el = document.getElementById('expansionText');
+            const area = data.area;
+            let text;
+
+            if (data.expansion === "none") {
+                text = "Expansion not prioritised. Current house can be fully optimised for present usage, with only basic structural margin for minor future changes.";
+            } else if (data.expansion === "vertical") {
+                text = "Keep structural design and column layout ready for one extra floor. Discuss higher foundation / column sizes with structural engineer so that future first‑floor addition is simpler.";
+            } else {
+                text = "Reserve side / rear setback as potential zone for adding one room or extending living area later. Keep plumbing and electrical routes planned so extension is easier.";
+            }
+
+            if (area < 600) {
+                text += " Since the plot is compact, vertical growth (adding another floor) is usually more practical than horizontal expansion.";
+            } else if (area > 1500) {
+                text += " The larger plot size allows both garden space and future built‑up addition if required.";
+            }
+
+            el.textContent = text;
+        }
+
+        function buildSmartHomeHints(data) {
+            const list = document.getElementById('smartHomeList');
+            const items = [];
+
+            items.push("Concealed conduits for future smart switches and dimmers in living room and master bedroom.");
+            items.push("Wi‑Fi router point kept near centre of the house to improve smart‑device connectivity.");
+            items.push("Door‑bell and main gate provision suitable for video door‑phone or smart lock in future.");
+            items.push("Camera points at parking / main gate corners, with separate power socket nearby.");
+            if (data.budget > 2500000) {
+                items.push("Budget band allows basic smart‑lighting and a few sensors (motion / door) from the start.");
+            } else {
+                items.push("Even with a modest budget, empty conduits and proper power points keep smart‑home upgrade ready for later.");
+            }
+
+            list.innerHTML = items.map(x => `<li>${x}</li>`).join("");
+        }
+
+        function buildShareLinks(data, grandTotal) {
+            const summary =
+`Smart Construction Planner Summary:
+Plot: ${data.length} ft x ${data.width} ft (${data.area.toFixed(0)} sq.ft)
+Facing: ${data.direction}, Region band: ${data.region}
+Suggested house type: ${data.houseType}
+Interior level: ${data.interior}
+Approx. total cost: ₹${grandTotal.toLocaleString()}
+
+Lifestyle focus: ${data.hostGuests ? "Hosts guests, " : ""}${data.workFromHome ? "Work-from-home, " : ""}${data.kids ? "Kids, " : ""}${data.elderly ? "Elderly, " : ""}`;
+
+            currentData.shareSummary = summary;
+
+            const waUrl = "https://wa.me/?text=" + encodeURIComponent(summary);
+            document.getElementById('waShare').href = waUrl;
+        }
+
+        function copySummary() {
+            if (!currentData.shareSummary) {
+                document.getElementById('copyStatus').textContent = "Generate plan first.";
+                return;
+            }
+            navigator.clipboard.writeText(currentData.shareSummary)
+                .then(() => {
+                    document.getElementById('copyStatus').textContent = "Summary copied. Paste into WhatsApp / email.";
+                })
+                .catch(() => {
+                    document.getElementById('copyStatus').textContent = "Copy not supported in this browser.";
+                });
+        }
 
         function open3DPreview() {
             const houseKey = currentData.houseKey;
@@ -506,21 +817,21 @@
             const result = document.getElementById('resultSection');
             if (!result) { alert('Please generate a plan first.'); return; }
             const clone = result.cloneNode(true);
-            // remove preview & buttons for PDF
             const previewSection = clone.querySelector('.preview-section');
             if (previewSection) previewSection.remove();
             const pdfBtn = clone.querySelector('.pdf-btn');
             if (pdfBtn) pdfBtn.remove();
             const backBtn = clone.querySelector('.back-btn');
             if (backBtn) backBtn.remove();
+            const shareBox = clone.querySelector('.share-box');
+            if (shareBox) shareBox.remove();
             try {
-                // store smaller HTML for more reliable mobile localStorage
                 localStorage.setItem('scp_pdf_html', clone.innerHTML);
             } catch (e) {
                 alert('PDF preview not available (storage blocked on this browser).');
                 return;
             }
-            window.location.href = 'pdf.html'; // same-tab navigation is safer on mobile [web:79][web:80]
+            window.location.href = 'pdf.html';
         }
 
         document.getElementById('backBtn').addEventListener('click', function(e) {
